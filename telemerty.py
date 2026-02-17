@@ -20,7 +20,7 @@ class Telemetry(Drone):
         self.db_tele = ConnectDb()
         self.connection = None 
         self.connected = False
-        #self.last_heartbeat = None
+    #creating thread for listening
     def listener(self):
         while True:
             msg = self.connection.wait_heartbeat(timeout=5)
