@@ -4,11 +4,7 @@ import threading
 import time 
 from tkinter import messagebox
 
-'''
-2 errors:
-1. what to do when the drone looses connection mid program 
-2. what to do when address already in use s
-'''
+
 
 class Drone:
     def __init__(self , name , type):
@@ -23,7 +19,17 @@ class Telemetry(Drone):
         self.running = False
     #creating thread for listening
     def listener(self):
-        pass 
+        while self.running:
+            msg = self.connection.wait_heartbeat(timeout=5)
+            if msg:
+                print(msg)
+                print('message recieved from ',self.name)
+            else:
+                print('connection lost from the drone')
+                self.connected = False
+                self.running = False
+                self.connection.close()
+            time.sleep(5)
     def connect_drone(self):
         self.db_tele.connectdb()
         query_name = 'select * from drone_info where drone_name = %s'
@@ -34,16 +40,18 @@ class Telemetry(Drone):
             self.port = data[0][4].strip()
             try:
                 self.connection = mavutil.mavlink_connection(f"udp:{self.ip}:{self.port}")
-                self.connection.wait_heartbeat()
-                self.last_heartbeat = time.time()
-                self.running = True
-                thread_listener = threading.Thread(target=self.listener, daemon=True)
-                thread_listener.start()
-                self.connected = True
-                print("Connected")
+                msg = self.connection.wait_heartbeat(timeout=10)
+                if msg:
+                    self.connected = True
+                    self.running = True
+                    thread = threading.Thread(target=self.listener , daemon=True)
+                    thread.start()
+                    messagebox.showinfo(message='drone connected' , title='success')
+                else:
+                    messagebox.showinfo(title='Error' , message=f'{self.name} has lost connection')
             except Exception as e:
-                print("Connection error:", e)
                 self.connected = False
+                print('error occured ' , e)
             self.db_tele.disconnectdb()
         elif(self.type_connection == 'radio'):
             pass

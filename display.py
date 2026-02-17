@@ -100,6 +100,8 @@ class Display():
             telemetry_connect = Telemetry(name_check , connection_type_check)
             self.db_display.disconnectdb()
             telemetry_connect.connect_drone()
+
+
     def connect_drone(self):
         self.connect_window = tk.Toplevel(self.tk)
         self.connect_window.title('connect drone')
