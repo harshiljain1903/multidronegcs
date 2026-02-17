@@ -20,9 +20,10 @@ class Telemetry(Drone):
         self.db_tele = ConnectDb()
         self.connection = None 
         self.connected = False
+        self.running = False
     #creating thread for listening
     def listener(self):
-        while True:
+        while self.running:
             try:
                 msg = self.connection.wait_heartbeat(timeout=5)
                 if msg:
@@ -30,6 +31,7 @@ class Telemetry(Drone):
                 else:
                     self.connection.close()
                     self.connected = False
+                    self.running = False
                     messagebox.showinfo(title='connection lost ' , message=f'connection lost from {self.name}')
             except Exception as e:
                 print(e)
@@ -45,6 +47,7 @@ class Telemetry(Drone):
                 self.connection = mavutil.mavlink_connection(f"udp:{self.ip}:{self.port}")
                 self.connection.wait_heartbeat()
                 self.last_heartbeat = time.time()
+                self.running = True
                 thread_listener = threading.Thread(target=self.listener, daemon=True)
                 thread_listener.start()
                 self.connected = True
