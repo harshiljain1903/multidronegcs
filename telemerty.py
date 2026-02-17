@@ -14,6 +14,10 @@ class Drone:
 
 
 class Telemetry(Drone):
+    drone_listeners = []
+    @staticmethod
+    def listen():
+        pass 
     def __init__(self, name, type):
         super().__init__(name, type)
         self.db_tele = ConnectDb()
@@ -33,6 +37,7 @@ class Telemetry(Drone):
                 self.connection = mavutil.mavlink_connection(f"udp:{ip}:{port}")
                 self.connection.wait_heartbeat(timeout=5)
                 self.connected = True 
+                Telemetry.drone_listeners.append(self.name)
                 print("Connected")
             except Exception as e:
                 print("Connection error:", e)
