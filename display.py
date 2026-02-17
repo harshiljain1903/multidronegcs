@@ -46,7 +46,7 @@ class Display():
             insert_query = 'insert into drone_info values(%s , %s , %s , %s ,%s)'
             insert_params = (name,type,firmware,ip,port)
             self.db_display.execute_instruction(insert_query , insert_params)
-            print('query executed')  
+            messagebox.showinfo(title='success' , message='drone added successfully')
         self.db_display.disconnectdb()
     def sitl_bt(self):
         sitl_box = tk.Toplevel(self.connection_type_level)

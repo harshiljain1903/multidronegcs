@@ -23,13 +23,16 @@ class Telemetry(Drone):
     #creating thread for listening
     def listener(self):
         while True:
-            msg = self.connection.wait_heartbeat(timeout=5)
-            if msg:
-                print("message recived from : " ,self.name)
-            else:
-                self.connection.close()
-                self.connected = False
-                messagebox.showinfo(title='connection lost ' , message=f'connection lost from {self.name}')
+            try:
+                msg = self.connection.wait_heartbeat(timeout=5)
+                if msg:
+                    print("message recived from : " ,self.name)
+                else:
+                    self.connection.close()
+                    self.connected = False
+                    messagebox.showinfo(title='connection lost ' , message=f'connection lost from {self.name}')
+            except Exception as e:
+                print(e)
     def connect_drone(self):
         self.db_tele.connectdb()
         query_name = 'select * from drone_info where drone_name = %s'
