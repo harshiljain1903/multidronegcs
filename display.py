@@ -14,7 +14,7 @@ from tkinter import messagebox
 from tkintermapview import TkinterMapView
 from database import ConnectDb
 from telemerty import Drone , Telemetry
-
+import threading
 class Display():
     def __init__(self):
         self.tk = tk.Tk()
@@ -46,7 +46,7 @@ class Display():
             insert_query = 'insert into drone_info values(%s , %s , %s , %s ,%s)'
             insert_params = (name,type,firmware,ip,port)
             self.db_display.execute_instruction(insert_query , insert_params)
-            print('query executed')
+            print('query executed')  
         self.db_display.disconnectdb()
     def sitl_bt(self):
         sitl_box = tk.Toplevel(self.connection_type_level)
@@ -100,7 +100,6 @@ class Display():
             telemetry_connect = Telemetry(name_check , connection_type_check)
             self.db_display.disconnectdb()
             telemetry_connect.connect_drone()
-            telemetry_connect.get_telemetry_drone()
     def connect_drone(self):
         self.connect_window = tk.Toplevel(self.tk)
         self.connect_window.title('connect drone')
