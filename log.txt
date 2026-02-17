@@ -1,0 +1,4 @@
+'NoneType' object has no attribute 'execute' 
+'NoneType' object has no attribute 'execute' 
+'NoneType' object has no attribute 'execute' 
+'NoneType' object has no attribute 'execute' 
