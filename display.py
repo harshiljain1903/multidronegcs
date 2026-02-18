@@ -97,11 +97,24 @@ class Display():
             messagebox.showinfo(title='Error' , message='Drone not found in the database')
         else:
             connection_type_check = check_data[0][1]
-            telemetry_connect = Telemetry(name_check , connection_type_check)
+            self.telemetry_connect = Telemetry(name_check , connection_type_check)
             self.db_display.disconnectdb()
-            telemetry_connect.connect_drone()
-
-
+            self.telemetry_connect.connect_drone()
+    def adapter_disconnect(self):
+        name_disconn_drone = self.text_disconnect_name.get()
+        self.telemetry_connect.disconn_drone(name_disconn_drone)
+    def disconnect_drone(self):
+        disconnect_window = tk.Toplevel(self.tk)
+        disconnect_window.title('disconnect drone')
+        disconnect_window.geometry(f'{self.width}x{self.height}')
+        frame1 = tk.Frame(disconnect_window , height=250)
+        frame1.pack(side='top' , fill='x')
+        label = tk.Label(frame1, text='Enter the name of the drone')
+        label.pack(side='left' , padx=20)
+        self.text_disconnect_name = tk.Entry(frame1)
+        self.text_disconnect_name.pack(side='left' , padx=20)
+        discon_btn = tk.Button(frame1 , text='Disconnect' , command=self.adapter_disconnect)
+        discon_btn.pack(side='left' , padx=20)
     def connect_drone(self):
         self.connect_window = tk.Toplevel(self.tk)
         self.connect_window.title('connect drone')
@@ -123,10 +136,12 @@ class Display():
         add_btn = tk.Button(frame1 , text='add drone to database' , command=self.add_drone)
         toggle_map = tk.Button(frame1 , text='toggle map' , command=self.change_titles)
         connect_drone = tk.Button(frame1 , text='connect the drone' , command=self.connect_drone)
+        disconnect_drone = tk.Button(frame1 , text='disconnect the drone ' , command=self.disconnect_drone)
         #packing the buttons
         add_btn.pack(side='right' , padx=10)
         toggle_map.pack(side='right' ,padx=10)
         connect_drone.pack(side='right' , padx=10)
+        disconnect_drone.pack(side='right' , padx=10)
         #map display 
         map_frame = tk.Frame(self.tk)
         map_frame.pack(side='top' , fill='both' , expand=True)

@@ -2,3 +2,4 @@
 'NoneType' object has no attribute 'execute' 
 'NoneType' object has no attribute 'execute' 
 'NoneType' object has no attribute 'execute' 
+Could not process parameters: str(savah), it must be of type list, tuple or dict 
