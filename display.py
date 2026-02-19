@@ -127,6 +127,12 @@ class Display():
         self.check_name_entry.pack(side='left')
         check_btn = tk.Button(frame1 , text='check drone' ,command=self.check_drone)
         check_btn.pack(side='left' , padx=20)
+    def dissconnect_all_connections(self):
+        self.telemetry_connect.close_port()
+        self.db_display.connectdb()
+        self.db_display.execute_instruction('truncate table active_drones')
+        self.db_display.disconnectdb()
+        self.tk.destroy()
     def display(self):
         self.tk.title('white cloud gcs version 1.0')
         self.tk.geometry(f'{self.width}x{self.height}')
@@ -149,4 +155,5 @@ class Display():
         self.map_widget.set_position(23.0225, 72.5714)
         self.map_widget.set_marker(23.0225, 72.5714, text="Ahmedabad")
         self.map_widget.pack(fill='both' , expand=True)
+        self.tk.protocol("WM_DELETE_WINDOW" , self.dissconnect_all_connections)
         self.tk.mainloop()
