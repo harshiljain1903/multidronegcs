@@ -20,15 +20,17 @@ class Telemetry(Drone):
     #creating thread for listening
     def listener(self):
         while self.running:
-            msg = self.connection.wait_heartbeat(timeout=5)
+            msg = self.connection.wait_heartbeat(timeout=6)
             if msg:
-                print(msg)
                 print('message recieved from ',self.name)
             else:
                 print('connection lost from the drone')
                 self.connected = False
                 self.running = False
                 self.connection.close()
+                self.db_tele.connectdb()
+                self.db_tele.execute_instruction("delete from active_drones where drone_name = %s " , (self.name,))
+                self.db_tele.disconnectdb()
             time.sleep(5)
     def close_port(self):
         self.running = False
