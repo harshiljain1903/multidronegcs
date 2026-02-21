@@ -1,2 +1,1 @@
-# multidronegcs
-This is a solo project by me regarding a multi drone gcs
+this project was to test my skills not actual gcs. 
